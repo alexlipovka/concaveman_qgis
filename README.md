@@ -17,7 +17,7 @@ Plugin depends on the following Python libraries:
 
 Binary dependencies:
 - concaveman-cpp complid library  
-  `DLL` for Windows is inluded
+  `DLL` for Windows is inluded and should be placed in "C:\soft\extraDLLS"
 	`SO` for Linux should be compiled from [source](https://github.com/sadaszewski/concaveman-cpp)
 
 # License
