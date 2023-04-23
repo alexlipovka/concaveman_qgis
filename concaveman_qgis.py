@@ -45,6 +45,9 @@ class ConcavemanQGIS:
     vector_layers = []
     layer_name = ''
 
+    concavity = 1.8
+    lenThreshold = 0.001
+
     def __init__(self, iface):
         """Constructor.
 
@@ -236,7 +239,8 @@ class ConcavemanQGIS:
         # print(pts)
         h = ConvexHull(pts)
         # print(h)
-        cc = concaveman2d(pts, h.vertices, 2, 0.005)
+        # cc = concaveman2d(pts, h.vertices, 2, 0.005)
+        cc = concaveman2d(pts, h.vertices, self.concavity, self.lenThreshold)
         # print(cc)
         hull = Polygon(cc)
         print(hull)
@@ -275,6 +279,8 @@ class ConcavemanQGIS:
             self.dlg = ConcavemanQGISDialog()
 
         self.loadVectors()
+        self.dlg.dsbConcavity.setValue(self.concavity)
+        self.dlg.dsbLenThres.setValue(self.lenThreshold)
         # show the dialog
         self.dlg.show()
         # Run the dialog event loop
@@ -286,6 +292,8 @@ class ConcavemanQGIS:
             # print(self.getPoints(self.dlg.cbVectors.currentIndex()))
             points = self.getPoints(self.dlg.cbVectors.currentIndex())
             # print(f'Num of points: {len(points)}')
+            self.concavity = self.dlg.dsbConcavity.value()
+            self.lenThreshold = self.dlg.dsbLenThres.value()
             hull = self.makeConcaveHull(points)
             self.makeHullLayer(hull)
             # print(self.makeConcaveHull(self.getPoints(self.dlg.cbVectors.currentIndex())))
