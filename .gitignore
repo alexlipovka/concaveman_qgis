@@ -1,3 +1,5 @@
 #Python
 *.pyc
 __pycache__/
+ui_*.py
+resources_rc.py
