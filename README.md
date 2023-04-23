@@ -7,3 +7,19 @@ This is a wrapper-type plugin, bases on amazing:
 Core functionality:
 - choose Point layer
 - generate concave hull for all points in that layer
+
+# Dependencies
+
+Plugin depends on the following Python libraries:
+- shapely
+- numpy
+- scipy
+
+Binary dependencies:
+- concaveman-cpp complid library  
+  `DLL` for Windows is inluded
+	`SO` for Linux should be compiled from [source](https://github.com/sadaszewski/concaveman-cpp)
+
+# License
+
+GPLv3
