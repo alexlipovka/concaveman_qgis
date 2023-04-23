@@ -43,6 +43,7 @@ class ConcavemanQGIS:
     """QGIS Plugin Implementation."""
     vector_list = []
     vector_layers = []
+    layer_name = ''
 
     def __init__(self, iface):
         """Constructor.
@@ -207,8 +208,9 @@ class ConcavemanQGIS:
             # Определяем тип геометрии по константе QgsWkbTypes
             if geometry_type == QgsWkbTypes.PointGeometry:
                 # print(f'{layer.name()}: Точки')
-                self.vector_list.append(f'Точки: {layer.name()}')            
+                self.vector_list.append(f'Points: {layer.name()}')            
                 self.vector_layers.append(layer)
+                self.layer_name = layer.name()
         self.dlg.cbVectors.clear()        
         self.dlg.cbVectors.addItems(self.vector_list)
 
@@ -242,7 +244,7 @@ class ConcavemanQGIS:
     
     def makeHullLayer(self, hull):
         # Создаем новый слой с именем "my_layer" и геометрией типа полигон
-        layer = QgsVectorLayer('Polygon', 'Concave Hull', 'memory')
+        layer = QgsVectorLayer('Polygon', f'{self.layer_name} — Concave Hull', 'memory')
 
         # Добавляем поля в таблицу атрибутов слоя
         field1 = QgsField('id', QVariant.Int)

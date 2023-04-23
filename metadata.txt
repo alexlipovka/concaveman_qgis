@@ -12,8 +12,8 @@ email=alex.lipovka@gmail.com
 
 about=Generates concave hull around given points according to a very fast 2D concave hull algorithm (https://github.com/mapbox/concaveman)
 
-tracker=http://bugs
-repository=http://repo
+tracker=https://github.com/alexlipovka/concaveman_qgis/issues
+repository=https://github.com/alexlipovka/concaveman_qgis
 # End of mandatory metadata
 
 # Recommended items:
@@ -23,9 +23,9 @@ hasProcessingProvider=no
 # changelog=
 
 # Tags are comma separated with spaces allowed
-tags=python
+tags=python, concave hull, hull, vector
 
-homepage=http://homepage
+homepage=https://github.com/alexlipovka/concaveman_qgis
 category=Vector
 icon=icon.png
 # experimental flag
