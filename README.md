@@ -14,10 +14,11 @@ Plugin depends on the following Python libraries:
 - shapely
 - numpy
 - scipy
+- cffi
 
 Binary dependencies:
 - concaveman-cpp complid library  
-  `DLL` for Windows is inluded and should be placed in "C:\soft\extraDLLS"
+  `DLL` for Windows is inluded
 	`SO` for Linux should be compiled from [source](https://github.com/sadaszewski/concaveman-cpp)
 
 # License
