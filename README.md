@@ -8,6 +8,20 @@ Core functionality:
 - choose Point layer
 - generate concave hull for all points in that layer
 
+# Installation
+
+Open osgeo4w shell and run:
+
+```bash
+python -m ensurepip --upgrade
+pip install cffi
+```
+
+Copy "lib" folder with supplied DLL to plugin dir
+```bash
+$APPDATA%\QGIS\QGIS3\profiles\default\python\plugins\concaveman_qgis
+```
+
 # Dependencies
 
 Plugin depends on the following Python libraries:
