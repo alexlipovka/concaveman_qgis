@@ -27,7 +27,7 @@ tags=python, concave hull, hull, vector
 
 homepage=https://github.com/alexlipovka/concaveman_qgis
 category=Vector
-icon=icon.png
+icon=img/logo.png
 # experimental flag
 experimental=True
 

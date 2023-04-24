@@ -48,9 +48,9 @@ PY_FILES = \
 
 UI_FILES = concaveman_qgis_dialog_base.ui
 
-EXTRAS = metadata.txt icon.png
+EXTRAS = metadata.txt icon.png concaveman.dll
 
-EXTRA_DIRS =
+EXTRA_DIRS = img
 
 COMPILED_RESOURCE_FILES = resources.py
 

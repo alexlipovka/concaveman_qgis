@@ -8,7 +8,6 @@ _ffi.cdef('void pyconcaveman2d(double *points_c, size_t num_points, int *hull_po
 # _lib = _ffi.dlopen('/Users/sadaszewski/Documents/workspace/concaveman-cpp/src/main/cpp/libconcaveman.so')
 _lib = _ffi.dlopen(os.path.join(os.path.dirname(__file__), './lib/concaveman.dll'))
 
-
 def concaveman2d(points, hull, concavity=2.0, lengthThreshold=0.0):
     points = np.array(points).astype(np.double)
     hull = np.array(hull).astype(np.int32)
@@ -48,7 +47,3 @@ def concaveman2d(points, hull, concavity=2.0, lengthThreshold=0.0):
     p_free[0](concave_points_c)
 
     return concave_points
-
-
-if __name__ == '__main__':
-    concaveman2d([[0, 0], [.25, .15], [1, 0], [1, 1]], [0, 2, 3])

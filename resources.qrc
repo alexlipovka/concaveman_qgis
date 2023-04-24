@@ -1,5 +1,5 @@
 <RCC>
     <qresource prefix="/plugins/concaveman_qgis" >
-        <file>logo.png</file>
+        <file>img/logo.png</file>
     </qresource>
 </RCC>

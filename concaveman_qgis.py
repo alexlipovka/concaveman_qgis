@@ -173,7 +173,7 @@ class ConcavemanQGIS:
     def initGui(self):
         """Create the menu entries and toolbar icons inside the QGIS GUI."""
 
-        icon_path = ':/plugins/concaveman_qgis/logo.png'
+        icon_path = ':/plugins/concaveman_qgis/img/logo.png'
         self.add_action(
             icon_path,
             text=self.tr(u'Concaveman'),
@@ -247,10 +247,8 @@ class ConcavemanQGIS:
         return(hull)
     
     def makeHullLayer(self, hull):
-        # Создаем новый слой с именем "my_layer" и геометрией типа полигон
         layer = QgsVectorLayer('Polygon', f'{self.layer_name} — Concave Hull', 'memory')
 
-        # Добавляем поля в таблицу атрибутов слоя
         field1 = QgsField('id', QVariant.Int)
         field2 = QgsField('name', QVariant.String)
         layer.addAttribute(field1)
@@ -264,14 +262,11 @@ class ConcavemanQGIS:
         feature1.setGeometry(QgsGeometry.fromWkt(hull.wkt))
         feature1.setAttributes([1, 'Polygon 1'])
         pr.addFeatures([feature1])
-     
 
         # Добавляем слой на карту
         QgsProject.instance().addMapLayer(layer)
 
     def run(self):
-        """Run method that performs all the real work"""
-
         # Create the dialog with elements (after translation) and keep reference
         # Only create GUI ONCE in callback, so that it will only load when the plugin is started
         if self.first_start == True:
@@ -281,23 +276,16 @@ class ConcavemanQGIS:
         self.loadVectors()
         self.dlg.dsbConcavity.setValue(self.concavity)
         self.dlg.dsbLenThres.setValue(self.lenThreshold)
-        # show the dialog
+
         self.dlg.show()
         # Run the dialog event loop
         result = self.dlg.exec_()
         # See if OK was pressed
         if result:
-            # print(self.dlg.cbVectors.currentIndex())
-            # print(self.getPoints(self.dlg.cbVectors.currentIndex()))
-            # print(self.getPoints(self.dlg.cbVectors.currentIndex()))
             points = self.getPoints(self.dlg.cbVectors.currentIndex())
-            # print(f'Num of points: {len(points)}')
             self.concavity = self.dlg.dsbConcavity.value()
             self.lenThreshold = self.dlg.dsbLenThres.value()
             hull = self.makeConcaveHull(points)
             self.makeHullLayer(hull)
-            # print(self.makeConcaveHull(self.getPoints(self.dlg.cbVectors.currentIndex())))
 
-            # Do something useful here - delete the line containing pass and
-            # substitute with your code.
             pass
