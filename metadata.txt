@@ -6,7 +6,7 @@
 name=Concaveman QGIS
 qgisMinimumVersion=3.0
 description=Makes concave hull for points
-version=0.1.02
+version=0.1.3
 author=Alex Lipovka
 email=alex.lipovka@gmail.com
 

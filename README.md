@@ -31,7 +31,7 @@ Plugin depends on the following Python libraries:
 - cffi
 
 Binary dependencies:
-- concaveman-cpp complid library  
+- concaveman-cpp compiled library  
   `DLL` for Windows is inluded  
 	`SO` for Linux should be compiled from [source](https://github.com/sadaszewski/concaveman-cpp)
 
