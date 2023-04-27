@@ -196,25 +196,25 @@ class ConcavemanQGIS:
                 # print('  - layer: ' + child.name())
 
     def loadVectors(self):
-        # vector_list = []
         # Получаем список всех слоев в проекте
+        self.dlg.cbVectors.clear()        
         layers = QgsProject.instance().mapLayers().values()
-
         # Отфильтровываем только векторные слои
         vector_layers = [layer for layer in layers if layer.type() == QgsMapLayerType.VectorLayer]
-
         # Выводим названия векторных слоев
         for layer in vector_layers:
-            # print(layer.name())
             # Получаем тип геометрии слоя
             geometry_type = layer.geometryType()
             # Определяем тип геометрии по константе QgsWkbTypes
             if geometry_type == QgsWkbTypes.PointGeometry:
-                # print(f'{layer.name()}: Точки')
-                self.vector_list.append(f'Points: {layer.name()}')            
-                self.vector_layers.append(layer)
-                self.layer_name = layer.name()
-        self.dlg.cbVectors.clear()        
+                addToList = True
+                for layeradded in self.vector_layers:
+                    if layeradded.id() == layer.id() :
+                        addToList = False
+                if addToList :
+                    self.vector_list.append(f'Points: {layer.name()}')            
+                    self.vector_layers.append(layer)
+                    self.layer_name = layer.name()
         self.dlg.cbVectors.addItems(self.vector_list)
 
     def getPoints(self, index):
@@ -234,16 +234,10 @@ class ConcavemanQGIS:
             self.iface.removeToolBarIcon(action)
 
     def makeConcaveHull(self, points_list):
-        # print(points_list)
         pts = np.array(points_list)
-        # print(pts)
         h = ConvexHull(pts)
-        # print(h)
-        # cc = concaveman2d(pts, h.vertices, 2, 0.005)
         cc = concaveman2d(pts, h.vertices, self.concavity, self.lenThreshold)
-        # print(cc)
         hull = Polygon(cc)
-        print(hull)
         return(hull)
     
     def makeHullLayer(self, hull):
