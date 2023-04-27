@@ -182,8 +182,7 @@ class ConcavemanQGIS:
 
         # will be set False in run()
         self.first_start = True
-
-    
+        initFFI()
     
     def get_group_layers(self, group, layersArray):
         # print('- group: ' + group.name())   
@@ -232,6 +231,7 @@ class ConcavemanQGIS:
                 self.tr(u'&Concaveman QGIS'),
                 action)
             self.iface.removeToolBarIcon(action)
+        unloadFFI()
 
     def makeConcaveHull(self, points_list):
         pts = np.array(points_list)
@@ -267,7 +267,6 @@ class ConcavemanQGIS:
             self.first_start = False
             self.dlg = ConcavemanQGISDialog()
 
-        initFFI()
         self.loadVectors()
         self.dlg.dsbConcavity.setValue(self.concavity)
         self.dlg.dsbLenThres.setValue(self.lenThreshold)
@@ -283,4 +282,3 @@ class ConcavemanQGIS:
             hull = self.makeConcaveHull(points)
             self.makeHullLayer(hull)
             pass
-        unloadFFI()

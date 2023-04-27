@@ -3,3 +3,4 @@
 __pycache__/
 ui_*.py
 resources_rc.py
+zip_build/
