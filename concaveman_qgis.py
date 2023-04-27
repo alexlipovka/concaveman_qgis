@@ -34,7 +34,7 @@ from .concaveman_qgis_dialog import ConcavemanQGISDialog
 import os.path
 
 from shapely.geometry import Polygon, mapping
-from .concaveman import concaveman2d
+from .concaveman import concaveman2d, initFFI, unloadFFI
 import numpy as np
 from scipy.spatial import ConvexHull
 
@@ -267,6 +267,7 @@ class ConcavemanQGIS:
             self.first_start = False
             self.dlg = ConcavemanQGISDialog()
 
+        initFFI()
         self.loadVectors()
         self.dlg.dsbConcavity.setValue(self.concavity)
         self.dlg.dsbLenThres.setValue(self.lenThreshold)
@@ -281,5 +282,5 @@ class ConcavemanQGIS:
             self.lenThreshold = self.dlg.dsbLenThres.value()
             hull = self.makeConcaveHull(points)
             self.makeHullLayer(hull)
-
             pass
+        unloadFFI()

@@ -6,7 +6,7 @@
 name=Concaveman QGIS
 qgisMinimumVersion=3.0
 description=Makes concave hull for points
-version=0.1.4
+version=0.1.5
 author=Alex Lipovka
 email=alex.lipovka@gmail.com
 
@@ -20,7 +20,7 @@ repository=https://github.com/alexlipovka/concaveman_qgis
 
 hasProcessingProvider=no
 # Uncomment the following line and add your changelog:
-changelog=Fix duplicating layers in list
+changelog=Fixed DLL not being unloaded
 
 # Tags are comma separated with spaces allowed
 tags=python, concave hull, hull, vector
