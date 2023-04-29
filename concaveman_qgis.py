@@ -22,6 +22,7 @@
  ***************************************************************************/
 """
 from qgis.core import QgsLayerTreeGroup, QgsLayerTreeLayer
+from qgis.core import QgsMapLayerProxyModel
 from qgis.core import *
 from qgis.PyQt.QtCore import QSettings, QTranslator, QCoreApplication, QVariant
 from qgis.PyQt.QtGui import QIcon
@@ -41,9 +42,6 @@ from scipy.spatial import ConvexHull
 
 class ConcavemanQGIS:
     """QGIS Plugin Implementation."""
-    vector_list = []
-    vector_layers = []
-    layer_name = ''
 
     concavity = 1.8
     lenThreshold = 0.001
@@ -184,46 +182,6 @@ class ConcavemanQGIS:
         self.first_start = True
         initFFI()
     
-    def get_group_layers(self, group, layersArray):
-        # print('- group: ' + group.name())   
-        for child in group.children():
-            if isinstance(child, QgsLayerTreeGroup):
-                # Recursive call to get nested groups
-                self.get_group_layers(child, layersArray)
-            else:
-                layersArray.append(child.layer().type() + ' ' + child.name())
-                # print('  - layer: ' + child.name())
-
-    def loadVectors(self):
-        # Получаем список всех слоев в проекте
-        self.dlg.cbVectors.clear()        
-        layers = QgsProject.instance().mapLayers().values()
-        # Отфильтровываем только векторные слои
-        vector_layers = [layer for layer in layers if layer.type() == QgsMapLayerType.VectorLayer]
-        # Выводим названия векторных слоев
-        for layer in vector_layers:
-            # Получаем тип геометрии слоя
-            geometry_type = layer.geometryType()
-            # Определяем тип геометрии по константе QgsWkbTypes
-            if geometry_type == QgsWkbTypes.PointGeometry:
-                addToList = True
-                for layeradded in self.vector_layers:
-                    if layeradded.id() == layer.id() :
-                        addToList = False
-                if addToList :
-                    self.vector_list.append(f'Points: {layer.name()}')            
-                    self.vector_layers.append(layer)
-                    self.layer_name = layer.name()
-        self.dlg.cbVectors.addItems(self.vector_list)
-
-    def getPoints(self, index):
-        point_list = []
-    
-        for feature in self.vector_layers[index].getFeatures():
-            geometry = feature.geometry().asPoint()
-            point_list.append([geometry.x(), geometry.y()])
-        return point_list
-
     def unload(self):
         """Removes the plugin menu item and icon from QGIS GUI."""
         for action in self.actions:
@@ -233,6 +191,56 @@ class ConcavemanQGIS:
             self.iface.removeToolBarIcon(action)
         unloadFFI()
 
+    # def get_group_layers(self, group, layersArray):
+    #     # print('- group: ' + group.name())   
+    #     for child in group.children():
+    #         if isinstance(child, QgsLayerTreeGroup):
+    #             # Recursive call to get nested groups
+    #             self.get_group_layers(child, layersArray)
+    #         else:
+    #             layersArray.append(child.layer().type() + ' ' + child.name())
+    #             # print('  - layer: ' + child.name())
+
+    # def loadVectors(self):
+    #     # Получаем список всех слоев в проекте
+    #     self.dlg.cbVectors.clear()        
+    #     layers = QgsProject.instance().mapLayers().values()
+    #     # Отфильтровываем только векторные слои
+    #     vector_layers = [layer for layer in layers if layer.type() == QgsMapLayerType.VectorLayer]
+    #     # Выводим названия векторных слоев
+    #     for layer in vector_layers:
+    #         # Получаем тип геометрии слоя
+    #         geometry_type = layer.geometryType()
+    #         # Определяем тип геометрии по константе QgsWkbTypes
+    #         if geometry_type == QgsWkbTypes.PointGeometry:
+    #             addToList = True
+    #             for layeradded in self.vector_layers:
+    #                 if layeradded.id() == layer.id() :
+    #                     addToList = False
+    #             if addToList :
+    #                 self.vector_list.append(f'Points: {layer.name()}')            
+    #                 self.vector_layers.append(layer)
+    #                 self.layer_name = layer.name()
+    #     self.dlg.cbVectors.addItems(self.vector_list)
+
+    def getPoints(self):
+        point_list = []
+        layer = self.dlg.mPointLayers.currentLayer()
+        if layer.type() != QgsMapLayerType.VectorLayer:
+            return []
+        # print(layer.vertices)
+        if layer.geometryType() != QgsWkbTypes.PointGeometry:
+            return []
+        if self.dlg.chkSelected.isChecked() :
+            features = layer.getSelectedFeatures()
+        else:
+            features = layer.getFeatures()
+
+        for feature in features:
+            geometry = feature.geometry().asPoint()
+            point_list.append([geometry.x(), geometry.y()])
+        return point_list
+
     def makeConcaveHull(self, points_list):
         pts = np.array(points_list)
         h = ConvexHull(pts)
@@ -241,7 +249,7 @@ class ConcavemanQGIS:
         return(hull)
     
     def makeHullLayer(self, hull):
-        layer = QgsVectorLayer('Polygon', f'{self.layer_name} — Concave Hull', 'memory')
+        layer = QgsVectorLayer('Polygon', f'{self.dlg.mPointLayers.currentLayer().name()} — Concave Hull', 'memory')
 
         field1 = QgsField('id', QVariant.Int)
         field2 = QgsField('name', QVariant.String)
@@ -267,7 +275,8 @@ class ConcavemanQGIS:
             self.first_start = False
             self.dlg = ConcavemanQGISDialog()
 
-        self.loadVectors()
+        self.dlg.mPointLayers.setFilters(QgsMapLayerProxyModel.PointLayer)
+        # self.loadVectors()
         self.dlg.dsbConcavity.setValue(self.concavity)
         self.dlg.dsbLenThres.setValue(self.lenThreshold)
 
@@ -276,7 +285,8 @@ class ConcavemanQGIS:
         result = self.dlg.exec_()
         # See if OK was pressed
         if result:
-            points = self.getPoints(self.dlg.cbVectors.currentIndex())
+            points = self.getPoints()
+            # points = self.getPoints(self.dlg.mPointLayers.currentIndex())
             self.concavity = self.dlg.dsbConcavity.value()
             self.lenThreshold = self.dlg.dsbLenThres.value()
             hull = self.makeConcaveHull(points)
