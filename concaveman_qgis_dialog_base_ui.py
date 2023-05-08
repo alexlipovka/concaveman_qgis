@@ -53,6 +53,9 @@ class Ui_ConcavemanQGISDialogBase(object):
         self.mPointLayers.setGeometry(QtCore.QRect(20, 10, 251, 27))
         self.mPointLayers.setShowCrs(True)
         self.mPointLayers.setObjectName("mPointLayers")
+        self.chkConvex = QtWidgets.QCheckBox(ConcavemanQGISDialogBase)
+        self.chkConvex.setGeometry(QtCore.QRect(20, 130, 151, 17))
+        self.chkConvex.setObjectName("chkConvex")
 
         self.retranslateUi(ConcavemanQGISDialogBase)
         self.button_box.accepted.connect(ConcavemanQGISDialogBase.accept)
@@ -65,4 +68,5 @@ class Ui_ConcavemanQGISDialogBase(object):
         self.label_2.setText(_translate("ConcavemanQGISDialogBase", "Concavity:"))
         self.label_3.setText(_translate("ConcavemanQGISDialogBase", "Length threshold:"))
         self.chkSelected.setText(_translate("ConcavemanQGISDialogBase", "Selected features"))
+        self.chkConvex.setText(_translate("ConcavemanQGISDialogBase", "Make Convex Hull"))
 from qgsmaplayercombobox import QgsMapLayerComboBox

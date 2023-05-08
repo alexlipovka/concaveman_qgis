@@ -115,6 +115,19 @@
     <bool>true</bool>
    </property>
   </widget>
+  <widget class="QCheckBox" name="chkConvex">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>130</y>
+     <width>151</width>
+     <height>17</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Make Convex Hull</string>
+   </property>
+  </widget>
  </widget>
  <customwidgets>
   <customwidget>

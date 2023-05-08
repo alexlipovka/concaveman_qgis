@@ -240,16 +240,30 @@ class ConcavemanQGIS:
             geometry = feature.geometry().asPoint()
             point_list.append([geometry.x(), geometry.y()])
         return point_list
+    
+    def makeConvexHullList(self, pts, vertices):
+        poly = []
+
+        for v in vertices:
+            poly.append(pts[v])
+        return poly
 
     def makeConcaveHull(self, points_list):
         pts = np.array(points_list)
         h = ConvexHull(pts)
-        cc = concaveman2d(pts, h.vertices, self.concavity, self.lenThreshold)
+        if self.dlg.chkConvex.isChecked():
+            cc = self.makeConvexHullList(pts, h.vertices)
+        else:
+            cc = concaveman2d(pts, h.vertices, self.concavity, self.lenThreshold)
+        
         hull = Polygon(cc)
         return(hull)
     
     def makeHullLayer(self, hull):
         layer = QgsVectorLayer('Polygon', f'{self.dlg.mPointLayers.currentLayer().name()} — Concave Hull', 'memory')
+        crs = self.dlg.mPointLayers.currentLayer().crs()
+        # print(self.dlg.mPointLayers.currentLayer().crs())
+        layer.setCrs(crs)
 
         field1 = QgsField('id', QVariant.Int)
         field2 = QgsField('name', QVariant.String)
